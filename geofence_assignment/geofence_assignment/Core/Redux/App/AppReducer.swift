@@ -14,7 +14,8 @@ func appReducer(action: Action, state: AppState?) -> AppState {
     
     switch action {
     default:
-        return state
+        state.locationState = locationReducer(action: action,
+                                              state: state.locationState)
     }
     
     return state

@@ -139,15 +139,48 @@ final class HomeVC: BaseVC {
             .disposed(by: disposeBag!)
         
         // MARK: onStartAddAction
-        viewModel.output.onStartAddAction
+        viewModel.output
+            .onStartAddAction
             .drive(onNext: { [weak self] in
                 self?.navigateToAddScreen()
             })
             .disposed(by: disposeBag!)
         
-        viewModel.output.onStartListAction
+        // MARK: onStartListAction
+        viewModel.output
+            .onStartListAction
             .drive(onNext: { [weak self] in
                 self?.navigateToListScreen()
+            })
+            .disposed(by: disposeBag!)
+        
+        // MARK: onRequestLocationServiceAction
+        viewModel.input
+            .onRequestLocationServiceAction
+            .onNext(())
+        
+        // MARK: onLocationAuthAction
+        viewModel.output
+            .onStartLocationAuthAction
+            .subscribe(onNext: { [weak self] auth in
+                switch auth {
+                case .authorized:
+                    self?.mapView.showsUserLocation = true
+                    self?.viewModel.input
+                        .onGetCurrentLocationAction
+                        .onNext(())
+                    
+                default:
+                    self?.mapView.showsUserLocation = false
+                }
+            })
+            .disposed(by: disposeBag!)
+        
+        // MARK: onGetCurrentLocationAction
+        viewModel.output
+            .onStartCurrentLocationAction
+            .subscribe(onNext: { [weak self] coordinate in
+                self?.focusToCurrentLocation(coordinate: coordinate)
             })
             .disposed(by: disposeBag!)
     }
@@ -161,8 +194,19 @@ extension HomeVC {
         navigationController?.present(controller, animated: true, completion: nil)
     }
     
+    // MARK: navigateToListScreen
     func navigateToListScreen() {
         let controller = mainAssemblerResolver.resolve(ListVC.self)!
         navigationController?.present(controller, animated: true, completion: nil)
+    }
+    
+    // MARK: focusToCurrentLocation
+    func focusToCurrentLocation(coordinate: CLLocationCoordinate2D?) {
+        guard let coordinate = coordinate else { return }
+        
+        let region = MKCoordinateRegion(center: coordinate,
+                                        latitudinalMeters: 1000,
+                                        longitudinalMeters: 1000)
+        mapView.setRegion(region, animated: true)
     }
 }

@@ -13,11 +13,15 @@ import RxCocoa
 protocol HomeInput {
     var onAddAction: AnyObserver<()> { get }
     var onListAction: AnyObserver<()> { get }
+    var onRequestLocationServiceAction: AnyObserver<()> { get }
+    var onGetCurrentLocationAction: AnyObserver<()> { get }
 }
 
 protocol HomeOutput {
     var onStartAddAction: Driver<()> { get }
     var onStartListAction: Driver<()> { get }
+    var onStartLocationAuthAction: LocationAuthObservable { get }
+    var onStartCurrentLocationAction: CurrentLocationObservable { get }
 }
 
 final class HomeVM {
@@ -33,9 +37,33 @@ final class HomeVM {
     
     private let addSubject = PublishSubject<()>()
     private let listSubject = PublishSubject<()>()
+    private let requestLocationServiceSubject = PublishSubject<()>()
+    private let getCurrentLocationSubject = PublishSubject<()>()
+    
+    private let requestLocationServiceUC: (() -> RequestLocationServiceUC) = {
+        mainAssemblerResolver.resolve(RequestLocationServiceUC.self)!
+    }
+    
+    private let getCurrentLocationUC: (() -> GetCurrentLocationUC) = {
+        mainAssemblerResolver.resolve(GetCurrentLocationUC.self)!
+    }
     
     init() {
         disposeBag = DisposeBag()
+        
+        // MARK: requestLocationServiceSubject
+        requestLocationServiceSubject
+            .subscribe(onNext: { [weak self] in
+                self?.requestLocationServiceUC().start()
+            })
+            .disposed(by: disposeBag!)
+        
+        // MARK: getCurrentLocationSubject
+        getCurrentLocationSubject
+            .subscribe(onNext: { [weak self] in
+                self?.getCurrentLocationUC().start()
+            })
+            .disposed(by: disposeBag!)
     }
     
     deinit {
@@ -52,6 +80,14 @@ extension HomeVM: HomeInput {
     var onListAction: AnyObserver<()> {
         return listSubject.asObserver()
     }
+    
+    var onRequestLocationServiceAction: AnyObserver<()> {
+        return requestLocationServiceSubject.asObserver()
+    }
+    
+    var onGetCurrentLocationAction: AnyObserver<()> {
+        return getCurrentLocationSubject.asObserver()
+    }
 }
 
 // MARK: - HomeOutput
@@ -62,6 +98,16 @@ extension HomeVM: HomeOutput {
     
     var onStartListAction: Driver<()> {
         return listSubject.asDriver(onErrorJustReturn: ())
+    }
+    
+    var onStartLocationAuthAction: LocationAuthObservable {
+        return mainAssemblerResolver.resolve(LocationAuthObservable.self,
+                                             name: LocationStateType.LocationAuthStatus.rawValue)!
+    }
+    
+    var onStartCurrentLocationAction: CurrentLocationObservable {
+        return mainAssemblerResolver.resolve(CurrentLocationObservable.self,
+                                             name: LocationStateType.CurrentLocation.rawValue)!
     }
 }
 

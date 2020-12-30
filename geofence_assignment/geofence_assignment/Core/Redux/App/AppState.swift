@@ -13,4 +13,6 @@ import TSwiftHelper
 
 struct AppState: StateType {
     var error: Error?
+    
+    var locationState = LocationState()
 }

@@ -24,5 +24,16 @@ extension UseCaseAssembly: Assembly {
         container.register(BaseUC.self) { r in
             BaseUC()
         }
+        
+        // MARK: - Location Section
+        // MARK: GetCurrentLocationUC
+        container.register(GetCurrentLocationUC.self) { _ in
+            GetCurrentLocationUC()
+        }
+        
+        // MARK: RequestLocationServiceUC
+        container.register(RequestLocationServiceUC.self) { _ in
+            RequestLocationServiceUC()
+        }
     }
 }
