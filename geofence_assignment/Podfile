@@ -28,6 +28,8 @@ def shared_pods
   pod 'RxCocoa'
   
   pod 'TSwiftHelper'
+  
+  pod 'SwiftLocation', '~> 3.2.3'
 end
 
 target 'geofence_assignment' do
