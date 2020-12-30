@@ -1,0 +1,49 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+def shared_pods
+  # Dependency injection framework for Swift with iOS/macOS/Linux
+  pod 'Swinject'
+  
+  # A clean and lightweight progress HUD for your iOS and tvOS app.
+  pod 'SVProgressHUD'
+  
+  # Convenient logging during development & release in Swift 3, 4 & 5
+  pod 'SwiftyBeaver'
+  
+  # A Swift Autolayout DSL for iOS & OS X
+  pod 'SnapKit'
+  
+  # Codeless drop-in universal library allows to prevent issues of keyboard sliding up and cover UITextField/UITextView. Neither need to write any code nor any setup required and much more.
+  pod 'IQKeyboardManagerSwift', '6.5.1'
+  
+  # Promises for Swift & ObjC.
+  pod 'PromiseKit'
+  
+  # Unidirectional Data Flow in Swift - Inspired by Redux
+  pod 'ReSwift'
+  
+  # Reactive Programming in Swift
+  pod 'RxSwift'
+  pod 'RxCocoa'
+  
+  pod 'TSwiftHelper'
+end
+
+target 'geofence_assignment' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+  
+  # Pods for geofence_assignment
+  shared_pods
+  
+  target 'geofence_assignmentTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'geofence_assignmentUITests' do
+    # Pods for testing
+  end
+
+end
