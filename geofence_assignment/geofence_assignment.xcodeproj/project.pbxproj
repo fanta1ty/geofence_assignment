@@ -39,6 +39,18 @@
 		B2EE66EF259CD5FD0067A843 /* BaseUC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EE66ED259CD5FD0067A843 /* BaseUC.swift */; };
 		B2EE66F8259CD63C0067A843 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EE66F7259CD63C0067A843 /* Log.swift */; };
 		B2EE66F9259CD63C0067A843 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EE66F7259CD63C0067A843 /* Log.swift */; };
+		B2EE6709259CD8910067A843 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EE6708259CD8910067A843 /* HomeVC.swift */; };
+		B2EE670A259CD8910067A843 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EE6708259CD8910067A843 /* HomeVC.swift */; };
+		B2EE6712259CD89D0067A843 /* HomeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EE6711259CD89D0067A843 /* HomeVM.swift */; };
+		B2EE6713259CD89D0067A843 /* HomeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EE6711259CD89D0067A843 /* HomeVM.swift */; };
+		B2EE6719259CE1AC0067A843 /* AddVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EE6718259CE1AC0067A843 /* AddVC.swift */; };
+		B2EE671A259CE1AC0067A843 /* AddVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EE6718259CE1AC0067A843 /* AddVC.swift */; };
+		B2EE6722259CE1B30067A843 /* AddVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EE6721259CE1B30067A843 /* AddVM.swift */; };
+		B2EE6723259CE1B30067A843 /* AddVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EE6721259CE1B30067A843 /* AddVM.swift */; };
+		B2EE672F259CE44F0067A843 /* ListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EE672E259CE44F0067A843 /* ListVC.swift */; };
+		B2EE6730259CE44F0067A843 /* ListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EE672E259CE44F0067A843 /* ListVC.swift */; };
+		B2EE6738259CE45A0067A843 /* ListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EE6737259CE45A0067A843 /* ListVM.swift */; };
+		B2EE6739259CE45A0067A843 /* ListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EE6737259CE45A0067A843 /* ListVM.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +99,12 @@
 		B2EE66E5259CD5D70067A843 /* AppAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAction.swift; sourceTree = "<group>"; };
 		B2EE66ED259CD5FD0067A843 /* BaseUC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseUC.swift; sourceTree = "<group>"; };
 		B2EE66F7259CD63C0067A843 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		B2EE6708259CD8910067A843 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
+		B2EE6711259CD89D0067A843 /* HomeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVM.swift; sourceTree = "<group>"; };
+		B2EE6718259CE1AC0067A843 /* AddVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddVC.swift; sourceTree = "<group>"; };
+		B2EE6721259CE1B30067A843 /* AddVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddVM.swift; sourceTree = "<group>"; };
+		B2EE672E259CE44F0067A843 /* ListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListVC.swift; sourceTree = "<group>"; };
+		B2EE6737259CE45A0067A843 /* ListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListVM.swift; sourceTree = "<group>"; };
 		CABC0A75843019C34B1FB508 /* Pods_geofence_assignment.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_geofence_assignment.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D92D11949252E3D7D35186F2 /* Pods-geofence_assignmentTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-geofence_assignmentTests.debug.xcconfig"; path = "Target Support Files/Pods-geofence_assignmentTests/Pods-geofence_assignmentTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E3376DF37B265B80EFBB66C0 /* Pods-geofence_assignment.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-geofence_assignment.debug.xcconfig"; path = "Target Support Files/Pods-geofence_assignment/Pods-geofence_assignment.debug.xcconfig"; sourceTree = "<group>"; };
@@ -248,6 +266,7 @@
 		B2EE66C0259CD4C50067A843 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				B2EE6707259CD8850067A843 /* Home */,
 				B2EE66C1259CD4D00067A843 /* Splash */,
 			);
 			path = Screens;
@@ -309,6 +328,35 @@
 				B2EE66F7259CD63C0067A843 /* Log.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		B2EE6707259CD8850067A843 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				B2EE6708259CD8910067A843 /* HomeVC.swift */,
+				B2EE6711259CD89D0067A843 /* HomeVM.swift */,
+				B2EE6717259CE1A10067A843 /* Add */,
+				B2EE672D259CE4340067A843 /* List */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		B2EE6717259CE1A10067A843 /* Add */ = {
+			isa = PBXGroup;
+			children = (
+				B2EE6718259CE1AC0067A843 /* AddVC.swift */,
+				B2EE6721259CE1B30067A843 /* AddVM.swift */,
+			);
+			path = Add;
+			sourceTree = "<group>";
+		};
+		B2EE672D259CE4340067A843 /* List */ = {
+			isa = PBXGroup;
+			children = (
+				B2EE672E259CE44F0067A843 /* ListVC.swift */,
+				B2EE6737259CE45A0067A843 /* ListVM.swift */,
+			);
+			path = List;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -548,14 +596,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2EE6722259CE1B30067A843 /* AddVM.swift in Sources */,
 				B2EE66B8259CD4A90067A843 /* DefinedAssets.swift in Sources */,
+				B2EE6709259CD8910067A843 /* HomeVC.swift in Sources */,
 				B2EE669B259CD3010067A843 /* CoreAssembly.swift in Sources */,
 				B2EE66F8259CD63C0067A843 /* Log.swift in Sources */,
 				B2EE66EE259CD5FD0067A843 /* BaseUC.swift in Sources */,
 				B2EE66A7259CD4340067A843 /* UseCaseAssembly.swift in Sources */,
+				B2EE6712259CD89D0067A843 /* HomeVM.swift in Sources */,
 				B2EE66D7259CD5830067A843 /* AppState.swift in Sources */,
+				B2EE6719259CE1AC0067A843 /* AddVC.swift in Sources */,
+				B2EE6738259CE45A0067A843 /* ListVM.swift in Sources */,
 				B2EE66E6259CD5D70067A843 /* AppAction.swift in Sources */,
 				B2EE66E0259CD5AF0067A843 /* AppReducer.swift in Sources */,
+				B2EE672F259CE44F0067A843 /* ListVC.swift in Sources */,
 				B2EE66AE259CD45A0067A843 /* AppAssembly.swift in Sources */,
 				B2EE646E259B91DF0067A843 /* AppDelegate.swift in Sources */,
 				B2EE66A1259CD3F70067A843 /* StateAssembly.swift in Sources */,
@@ -568,14 +622,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2EE6723259CE1B30067A843 /* AddVM.swift in Sources */,
 				B2EE66B9259CD4A90067A843 /* DefinedAssets.swift in Sources */,
+				B2EE670A259CD8910067A843 /* HomeVC.swift in Sources */,
 				B2EE669C259CD3010067A843 /* CoreAssembly.swift in Sources */,
 				B2EE66F9259CD63C0067A843 /* Log.swift in Sources */,
 				B2EE66EF259CD5FD0067A843 /* BaseUC.swift in Sources */,
 				B2EE66A8259CD4340067A843 /* UseCaseAssembly.swift in Sources */,
+				B2EE6713259CD89D0067A843 /* HomeVM.swift in Sources */,
 				B2EE66D8259CD5830067A843 /* AppState.swift in Sources */,
+				B2EE671A259CE1AC0067A843 /* AddVC.swift in Sources */,
+				B2EE6739259CE45A0067A843 /* ListVM.swift in Sources */,
 				B2EE66E7259CD5D70067A843 /* AppAction.swift in Sources */,
 				B2EE66E1259CD5B00067A843 /* AppReducer.swift in Sources */,
+				B2EE6730259CE44F0067A843 /* ListVC.swift in Sources */,
 				B2EE66AF259CD45A0067A843 /* AppAssembly.swift in Sources */,
 				B2EE6485259B91E20067A843 /* geofence_assignmentTests.swift in Sources */,
 				B2EE66A2259CD3F70067A843 /* StateAssembly.swift in Sources */,

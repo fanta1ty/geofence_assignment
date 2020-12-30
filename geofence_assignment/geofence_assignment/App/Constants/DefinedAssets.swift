@@ -10,5 +10,5 @@ import UIKit
 
 enum DefinedAssets: String {
     // MARK: - SplashVC
-    case background = "01_01_Icon"
+    case addIcon = "Image"
 }

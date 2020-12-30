@@ -1,5 +1,5 @@
 //
-//  SplashVC.swift
+//  AddVC.swift
 //  geofence_assignment
 //
 //  Created by Thinh Nguyen on 12/30/20.
@@ -12,7 +12,7 @@ import UIKit
 import SVProgressHUD
 import TSwiftHelper
 
-final class SplashVC: BaseVC {
+final class AddVC: BaseVC {
     
     // MARK: - UI Properties
     
@@ -22,7 +22,7 @@ final class SplashVC: BaseVC {
                                              name: CoreAssemblyType.Store.rawValue)!
     }
     
-    let viewModel: SplashVM = SplashVM()
+    let viewModel: AddVM = AddVM()
     private var disposeBag: DisposeBag?
     
     init() {
@@ -63,6 +63,6 @@ final class SplashVC: BaseVC {
 }
 
 // MARK: - Private Functions
-extension SplashVC {
+extension AddVC {
     
 }
