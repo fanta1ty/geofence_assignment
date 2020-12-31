@@ -29,5 +29,5 @@ typealias CurrentLocationObservable
 
 struct LocationState {
     let locationAuthStatusState: BehaviorRelay<LocationAuthType> = BehaviorRelay(value: .none)
-    let currentLocationState: PublishRelay<CLLocationCoordinate2D?> = PublishRelay()
+    let currentLocationState: BehaviorRelay<CLLocationCoordinate2D?> = BehaviorRelay(value: nil)
 }

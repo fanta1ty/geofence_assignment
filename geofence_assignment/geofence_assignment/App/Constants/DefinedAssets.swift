@@ -11,4 +11,6 @@ import UIKit
 enum DefinedAssets: String {
     // MARK: - SplashVC
     case addIcon = "Image"
+    case mapPinIcon = "Image-1"
+    case currentLocationIcon = "Image-2"
 }
