@@ -24,6 +24,8 @@
 		B24902AD25A05E2600F38E8F /* LocalGeofenceDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24902AB25A05E2600F38E8F /* LocalGeofenceDataStore.swift */; };
 		B24902B525A05E3C00F38E8F /* ImplementLocalGeofenceDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24902B425A05E3C00F38E8F /* ImplementLocalGeofenceDataStore.swift */; };
 		B24902B625A05E3C00F38E8F /* ImplementLocalGeofenceDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24902B425A05E3C00F38E8F /* ImplementLocalGeofenceDataStore.swift */; };
+		B24902C125A0710700F38E8F /* MonitorGeofenceUC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24902C025A0710700F38E8F /* MonitorGeofenceUC.swift */; };
+		B24902C225A0710700F38E8F /* MonitorGeofenceUC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24902C025A0710700F38E8F /* MonitorGeofenceUC.swift */; };
 		B2EE646E259B91DF0067A843 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EE646D259B91DF0067A843 /* AppDelegate.swift */; };
 		B2EE6477259B91E20067A843 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2EE6476259B91E20067A843 /* Assets.xcassets */; };
 		B2EE647A259B91E20067A843 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B2EE6478259B91E20067A843 /* LaunchScreen.storyboard */; };
@@ -107,6 +109,7 @@
 		B249029225A041A200F38E8F /* AddGeofenceUC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGeofenceUC.swift; sourceTree = "<group>"; };
 		B24902AB25A05E2600F38E8F /* LocalGeofenceDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalGeofenceDataStore.swift; sourceTree = "<group>"; };
 		B24902B425A05E3C00F38E8F /* ImplementLocalGeofenceDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImplementLocalGeofenceDataStore.swift; sourceTree = "<group>"; };
+		B24902C025A0710700F38E8F /* MonitorGeofenceUC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitorGeofenceUC.swift; sourceTree = "<group>"; };
 		B2EE646A259B91DF0067A843 /* geofence_assignment.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = geofence_assignment.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2EE646D259B91DF0067A843 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B2EE6476259B91E20067A843 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -202,6 +205,7 @@
 			isa = PBXGroup;
 			children = (
 				B249029225A041A200F38E8F /* AddGeofenceUC.swift */,
+				B24902C025A0710700F38E8F /* MonitorGeofenceUC.swift */,
 			);
 			path = Geofence;
 			sourceTree = "<group>";
@@ -698,6 +702,7 @@
 				B2EE66A7259CD4340067A843 /* UseCaseAssembly.swift in Sources */,
 				B249029325A041A200F38E8F /* AddGeofenceUC.swift in Sources */,
 				B2EE6772259CEAFD0067A843 /* LocationAction.swift in Sources */,
+				B24902C125A0710700F38E8F /* MonitorGeofenceUC.swift in Sources */,
 				B249028725A03F5500F38E8F /* GeofenceReducer.swift in Sources */,
 				B2EE6712259CD89D0067A843 /* HomeVM.swift in Sources */,
 				B2EE66D7259CD5830067A843 /* AppState.swift in Sources */,
@@ -736,6 +741,7 @@
 				B2EE66A8259CD4340067A843 /* UseCaseAssembly.swift in Sources */,
 				B249029425A041A200F38E8F /* AddGeofenceUC.swift in Sources */,
 				B2EE6773259CEAFD0067A843 /* LocationAction.swift in Sources */,
+				B24902C225A0710700F38E8F /* MonitorGeofenceUC.swift in Sources */,
 				B249028825A03F5500F38E8F /* GeofenceReducer.swift in Sources */,
 				B2EE6713259CD89D0067A843 /* HomeVM.swift in Sources */,
 				B2EE66D8259CD5830067A843 /* AppState.swift in Sources */,

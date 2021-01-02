@@ -196,8 +196,14 @@ final class HomeVC: BaseVC {
             .onStartAddGeofenceAction
             .subscribe(onNext: { [weak self] geofence in
                 self?.addGeofenceOnMap(geofence: geofence)
+                self?.viewModel.input
+                    .onMonitorGeofenceAction.onNext(())
             })
             .disposed(by: disposeBag!)
+        
+        // MARK: onMonitorGeofenceAction
+        viewModel.input
+            .onMonitorGeofenceAction.onNext(())
     }
 }
 

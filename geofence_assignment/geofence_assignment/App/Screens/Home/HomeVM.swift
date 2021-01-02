@@ -15,6 +15,7 @@ protocol HomeInput {
     var onListAction: AnyObserver<()> { get }
     var onRequestLocationServiceAction: AnyObserver<()> { get }
     var onGetCurrentLocationAction: AnyObserver<()> { get }
+    var onMonitorGeofenceAction: AnyObserver<()> { get }
 }
 
 protocol HomeOutput {
@@ -23,6 +24,7 @@ protocol HomeOutput {
     var onStartLocationAuthAction: LocationAuthObservable { get }
     var onStartCurrentLocationAction: CurrentLocationObservable { get }
     var onStartAddGeofenceAction: AddGeofenceObservable { get }
+    var onStartMonitorGeofenceAction: Driver<()> { get }
 }
 
 final class HomeVM {
@@ -40,6 +42,7 @@ final class HomeVM {
     private let listSubject = PublishSubject<()>()
     private let requestLocationServiceSubject = PublishSubject<()>()
     private let getCurrentLocationSubject = PublishSubject<()>()
+    private let monitorGeofenceSubject = PublishSubject<()>()
     
     private let requestLocationServiceUC: (() -> RequestLocationServiceUC) = {
         mainAssemblerResolver.resolve(RequestLocationServiceUC.self)!
@@ -47,6 +50,10 @@ final class HomeVM {
     
     private let getCurrentLocationUC: (() -> GetCurrentLocationUC) = {
         mainAssemblerResolver.resolve(GetCurrentLocationUC.self)!
+    }
+    
+    private let monitorGeofenceUC: (() -> MonitorGeofenceUC) = {
+        mainAssemblerResolver.resolve(MonitorGeofenceUC.self)!
     }
     
     init() {
@@ -63,6 +70,13 @@ final class HomeVM {
         getCurrentLocationSubject
             .subscribe(onNext: { [weak self] in
                 self?.getCurrentLocationUC().start()
+            })
+            .disposed(by: disposeBag!)
+        
+        // MARK: monitorGeofenceSubject
+        monitorGeofenceSubject
+            .subscribe(onNext: { [weak self] in
+                self?.monitorGeofenceUC().start()
             })
             .disposed(by: disposeBag!)
     }
@@ -89,6 +103,10 @@ extension HomeVM: HomeInput {
     var onGetCurrentLocationAction: AnyObserver<()> {
         return getCurrentLocationSubject.asObserver()
     }
+    
+    var onMonitorGeofenceAction: AnyObserver<()> {
+        return monitorGeofenceSubject.asObserver()
+    }
 }
 
 // MARK: - HomeOutput
@@ -114,6 +132,10 @@ extension HomeVM: HomeOutput {
     var onStartAddGeofenceAction: AddGeofenceObservable {
         return mainAssemblerResolver.resolve(AddGeofenceObservable.self,
                                              name: GeofenceStateType.add.rawValue)!
+    }
+    
+    var onStartMonitorGeofenceAction: Driver<()> {
+        return monitorGeofenceSubject.asDriver(onErrorJustReturn: ())
     }
 }
 

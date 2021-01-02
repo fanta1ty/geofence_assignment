@@ -41,5 +41,10 @@ extension UseCaseAssembly: Assembly {
         container.register(AddGeofenceUC.self) { r, geofence in
             AddGeofenceUC(geofence: geofence)
         }
+        
+        // MARK: MonitorGeofenceUC
+        container.register(MonitorGeofenceUC.self) { _ in
+            MonitorGeofenceUC()
+        }
     }
 }
