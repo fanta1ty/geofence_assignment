@@ -27,6 +27,8 @@ final class AddVC: BaseVC {
                                                   text: "Choose Geofence Type:")
     private let geofenceRadiusTitleLb = LabelHelper(style: LabelStyle(),
                                                   text: "Enter Radius:")
+    private let geofenceRadiusUnitTitleLb = LabelHelper(style: LabelStyle(textAlignment: .right),
+                                                        text: "m")
     
     private let topCancelBtn = ButtonHelper(style: ButtonStyle())
     private let currentLocationBtn = ButtonHelper(style: ButtonStyle())
@@ -60,8 +62,7 @@ final class AddVC: BaseVC {
     
     // MARK: - Local Properties
     private var appStateStore: Store<AppState> {
-        return mainAssemblerResolver.resolve(Store.self,
-                                             name: CoreAssemblyType.Store.rawValue)!
+        return mainAssemblerResolver.resolve(Store.self)!
     }
     
     let viewModel: AddVM = AddVM()
@@ -201,9 +202,19 @@ final class AddVC: BaseVC {
         containerView.addSubview(radiusView)
         
         radiusView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(16)
+            make.left.equalToSuperview().offset(16)
+            make.right.equalToSuperview().offset(-48)
             make.top.equalTo(geofenceRadiusTitleLb.snp.bottom).offset(8)
             make.height.equalTo(40)
+        }
+        
+        // MARK: geofenceRadiusUnitTitleLb
+        containerView.addSubview(geofenceRadiusUnitTitleLb)
+        
+        geofenceRadiusUnitTitleLb.snp.makeConstraints { make in
+            make.right.equalToSuperview().offset(-16)
+            make.left.equalTo(radiusView.snp.right).offset(8)
+            make.centerY.equalTo(radiusView)
         }
         
         // MARK: radiusTf

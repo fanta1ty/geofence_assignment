@@ -18,8 +18,7 @@ final class SplashVC: BaseVC {
     
     // MARK: - Local Properties
     private var appStateStore: Store<AppState> {
-        return mainAssemblerResolver.resolve(Store.self,
-                                             name: CoreAssemblyType.Store.rawValue)!
+        return mainAssemblerResolver.resolve(Store.self)!
     }
     
     let viewModel: SplashVM = SplashVM()

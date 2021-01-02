@@ -18,6 +18,10 @@ func geofenceReducer(action: Action, state: GeofenceState?) -> GeofenceState {
     case let action as UpdateAddGeofenceAction:
         state.addGeofenceState.accept(action.state)
         
+    // MARK: Delete Geofence
+    case let action as UpdateDeleteGeofenceAction:
+        state.deleteGeofenceState.accept(action.state)
+        
     default:
         break
     }

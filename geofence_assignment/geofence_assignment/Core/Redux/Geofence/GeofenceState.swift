@@ -16,10 +16,14 @@ import TSwiftHelper
 typealias AddGeofenceObservable
     = Observable<Geofence>
 
+typealias DeleteGeofenceObservable
+    = Observable<Geofence>
+
 enum GeofenceStateType: String {
-    case add
+    case add, delete
 }
 
 struct GeofenceState {
     let addGeofenceState: PublishRelay<Geofence> = PublishRelay()
+    let deleteGeofenceState: PublishRelay<Geofence> = PublishRelay()
 }

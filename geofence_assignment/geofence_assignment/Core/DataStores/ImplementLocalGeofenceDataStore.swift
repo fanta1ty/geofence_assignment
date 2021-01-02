@@ -72,7 +72,7 @@ extension ImplementLocalGeofenceDataStore: LocalGeofenceDataStore {
         return get()
             .done { geofences in
                 var newList = geofences
-                newList.removeAll { $0 == geofence }
+                newList.removeAll { $0.identifier == geofence.identifier }
                 
                 let items = NSMutableArray()
                 

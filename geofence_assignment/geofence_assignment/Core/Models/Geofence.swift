@@ -11,6 +11,16 @@ import CoreLocation
 
 enum GeofenceType: Int {
     case enter, exit
+    
+    var name: String {
+        switch self {
+        case .enter:
+            return "Enter"
+            
+        default:
+            return "Exit"
+        }
+    }
 }
 
 class Geofence: NSObject, NSCoding, MKAnnotation {

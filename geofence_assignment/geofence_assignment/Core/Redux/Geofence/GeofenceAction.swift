@@ -15,3 +15,8 @@ import TSwiftHelper
 struct UpdateAddGeofenceAction: Action {
     let state: Geofence
 }
+
+// MARK: UpdateDeleteGeofenceAction
+struct UpdateDeleteGeofenceAction: Action {
+    let state: Geofence
+}

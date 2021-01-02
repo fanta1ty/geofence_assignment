@@ -35,8 +35,7 @@ final class HomeVC: BaseVC {
     
     // MARK: - Local Properties
     private var appStateStore: Store<AppState> {
-        return mainAssemblerResolver.resolve(Store.self,
-                                             name: CoreAssemblyType.Store.rawValue)!
+        return mainAssemblerResolver.resolve(Store.self)!
     }
     
     let viewModel: HomeVM = HomeVM()
@@ -204,6 +203,36 @@ final class HomeVC: BaseVC {
         // MARK: onMonitorGeofenceAction
         viewModel.input
             .onMonitorGeofenceAction.onNext(())
+        
+        // MARK:
+        viewModel.output
+            .onStartDeleteGeofenceAction
+            .subscribe(onNext: { [weak self] geofence in
+                guard let self = self else { return }
+                
+                for overlay in self.mapView.overlays {
+                    if let circleOverlay = overlay as? MKCircle {
+                        if circleOverlay.coordinate.latitude == geofence.coordinate.latitude &&
+                            circleOverlay.coordinate.longitude == geofence.coordinate.longitude &&
+                            circleOverlay.radius == geofence.radius {
+                            self.mapView.removeOverlay(circleOverlay)
+                            break
+                        }
+                    }
+                }
+                
+                for annotation in self.mapView.annotations {
+                    if annotation.coordinate.latitude == geofence.coordinate.latitude && annotation.coordinate.longitude == geofence.coordinate.longitude {
+                        self.mapView.removeAnnotation(annotation)
+                        break
+                    }
+                }
+                
+                
+                self.viewModel.input
+                    .onMonitorGeofenceAction.onNext(())
+            })
+            .disposed(by: disposeBag!)
     }
 }
 

@@ -22,22 +22,32 @@ extension StateAssembly: Assembly {
         
         // MARK: - Location Section
         // MARK: LocationAuthObservable
-        container.register(LocationAuthObservable.self, name: LocationStateType.LocationAuthStatus.rawValue) { r in
+        container.register(LocationAuthObservable.self,
+                           name: LocationStateType.LocationAuthStatus.rawValue) { r in
             let appStateStore: Store<AppState> = r.resolve(Store.self)!
             return appStateStore.state.locationState.locationAuthStatusState.asObservable()
         }
         
         // MARK: CurrentLocationObservable
-        container.register(CurrentLocationObservable.self, name: LocationStateType.CurrentLocation.rawValue) { r in
+        container.register(CurrentLocationObservable.self,
+                           name: LocationStateType.CurrentLocation.rawValue) { r in
             let appStateStore: Store<AppState> = r.resolve(Store.self)!
             return appStateStore.state.locationState.currentLocationState.asObservable()
         }
         
         // MARK: - Geofence Section
         // MARK: AddGeofenceObservable
-        container.register(AddGeofenceObservable.self, name: GeofenceStateType.add.rawValue) { r in
+        container.register(AddGeofenceObservable.self,
+                           name: GeofenceStateType.add.rawValue) { r in
             let appStateStore: Store<AppState> = r.resolve(Store.self)!
             return appStateStore.state.geofenceState.addGeofenceState.asObservable()
+        }
+        
+        // MARK: DeleteGeofenceObservable
+        container.register(DeleteGeofenceObservable.self,
+                           name: GeofenceStateType.delete.rawValue) { r in
+            let appStateStore: Store<AppState> = r.resolve(Store.self)!
+            return appStateStore.state.geofenceState.deleteGeofenceState.asObservable()
         }
     }
 }
