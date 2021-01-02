@@ -54,10 +54,18 @@ extension GetCurrentLocationUC {
 extension GetCurrentLocationUC {
     // MARK: getCurrentLocation
     @objc final private func getCurrentLocation() {
-        Locator.currentPosition(accuracy: .city) { location in
-            self.updateState(state: location.coordinate)
-        } onFail: { error, _ in
-            self.handleError(error: error)
+        SwiftLocation.gpsLocationWith {
+            $0.subscription = .single
+            $0.accuracy = .city
+        }
+        .then { result in
+            switch result {
+            case .success(let location):
+                self.updateState(state: location.coordinate)
+                
+            case .failure(let error):
+                self.handleError(error: error)
+            }
         }
     }
 }

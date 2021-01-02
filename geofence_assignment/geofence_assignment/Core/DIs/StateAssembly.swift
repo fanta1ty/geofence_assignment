@@ -32,5 +32,12 @@ extension StateAssembly: Assembly {
             let appStateStore: Store<AppState> = r.resolve(Store.self)!
             return appStateStore.state.locationState.currentLocationState.asObservable()
         }
+        
+        // MARK: - Geofence Section
+        // MARK: AddGeofenceObservable
+        container.register(AddGeofenceObservable.self, name: GeofenceStateType.add.rawValue) { r in
+            let appStateStore: Store<AppState> = r.resolve(Store.self)!
+            return appStateStore.state.geofenceState.addGeofenceState.asObservable()
+        }
     }
 }

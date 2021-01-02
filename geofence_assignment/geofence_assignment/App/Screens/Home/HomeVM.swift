@@ -22,6 +22,7 @@ protocol HomeOutput {
     var onStartListAction: Driver<()> { get }
     var onStartLocationAuthAction: LocationAuthObservable { get }
     var onStartCurrentLocationAction: CurrentLocationObservable { get }
+    var onStartAddGeofenceAction: AddGeofenceObservable { get }
 }
 
 final class HomeVM {
@@ -108,6 +109,11 @@ extension HomeVM: HomeOutput {
     var onStartCurrentLocationAction: CurrentLocationObservable {
         return mainAssemblerResolver.resolve(CurrentLocationObservable.self,
                                              name: LocationStateType.CurrentLocation.rawValue)!
+    }
+    
+    var onStartAddGeofenceAction: AddGeofenceObservable {
+        return mainAssemblerResolver.resolve(AddGeofenceObservable.self,
+                                             name: GeofenceStateType.add.rawValue)!
     }
 }
 

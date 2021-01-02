@@ -35,5 +35,11 @@ extension UseCaseAssembly: Assembly {
         container.register(RequestLocationServiceUC.self) { _ in
             RequestLocationServiceUC()
         }
+        
+        // MARK: - Geofence Section
+        // MARK: AddGeofenceUC
+        container.register(AddGeofenceUC.self) { r, geofence in
+            AddGeofenceUC(geofence: geofence)
+        }
     }
 }

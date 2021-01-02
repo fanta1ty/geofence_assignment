@@ -56,6 +56,12 @@ final class HomeVC: BaseVC {
         disposeBag = nil
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        loadStoredGeofence()
+    }
+    
     deinit {
         Log.verbose("\(nameOfClass) deinit")
     }
@@ -116,6 +122,7 @@ final class HomeVC: BaseVC {
         }
         
         // MARK: mapView
+        mapView.delegate = self
         view.addSubview(mapView)
         
         mapView.snp.makeConstraints { make in
@@ -183,30 +190,89 @@ final class HomeVC: BaseVC {
                 self?.focusToCurrentLocation(coordinate: coordinate)
             })
             .disposed(by: disposeBag!)
+        
+        // MARK: onStartAddGeofenceAction
+        viewModel.output
+            .onStartAddGeofenceAction
+            .subscribe(onNext: { [weak self] geofence in
+                self?.addGeofenceOnMap(geofence: geofence)
+            })
+            .disposed(by: disposeBag!)
     }
 }
 
-// MARK: - Functions
+// MARK: - MKMapViewDelegate
+extension HomeVC: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        guard overlay is MKCircle else { return MKOverlayRenderer() }
+        
+        let circleRenderer = MKCircleRenderer(overlay: overlay)
+        circleRenderer.lineWidth = 1.0
+        circleRenderer.strokeColor = .green
+        circleRenderer.fillColor = UIColor.green.withAlphaComponent(0.4)
+        return circleRenderer
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard annotation is Geofence else { return nil }
+        
+        let identifier = "GeofenceView"
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKPinAnnotationView
+        
+        if annotationView != nil {
+            annotationView?.annotation = annotation
+        } else {
+            annotationView = MKPinAnnotationView(annotation: annotation,
+                                                 reuseIdentifier: identifier)
+            annotationView!.canShowCallout = true
+        }
+        
+        return annotationView
+    }
+}
+
+// MARK: - Private Functions
 extension HomeVC {
     // MARK: navigateToAddScreen
-    func navigateToAddScreen() {
+    private func navigateToAddScreen() {
         let controller = mainAssemblerResolver.resolve(AddVC.self)!
         navigationController?.present(controller, animated: true, completion: nil)
     }
     
     // MARK: navigateToListScreen
-    func navigateToListScreen() {
+    private func navigateToListScreen() {
         let controller = mainAssemblerResolver.resolve(ListVC.self)!
         navigationController?.present(controller, animated: true, completion: nil)
     }
     
     // MARK: focusToCurrentLocation
-    func focusToCurrentLocation(coordinate: CLLocationCoordinate2D?) {
+    private func focusToCurrentLocation(coordinate: CLLocationCoordinate2D?) {
         guard let coordinate = coordinate else { return }
         
         let region = MKCoordinateRegion(center: coordinate,
                                         latitudinalMeters: 1000,
                                         longitudinalMeters: 1000)
         mapView.setRegion(region, animated: true)
+    }
+    
+    // MARK: updateGeofenceOnMap
+    private func addGeofenceOnMap(geofence: Geofence) {
+        mapView.addAnnotation(geofence)
+        
+        let circleOverlay = MKCircle(center: geofence.coordinate,
+                                     radius: geofence.radius)
+    
+        mapView.addOverlay(circleOverlay)
+    }
+    
+    // MARK: loadStoredGeofence
+    private func loadStoredGeofence() {
+        let geofenceDataStore = mainAssemblerResolver.resolve(LocalGeofenceDataStore.self)!
+        _ = geofenceDataStore.get()
+            .done { [weak self] geofences in
+                for geofence in geofences {
+                    self?.addGeofenceOnMap(geofence: geofence)
+                }
+            }
     }
 }

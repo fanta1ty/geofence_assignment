@@ -69,7 +69,6 @@ final class AddVC: BaseVC {
     
     init() {
         super.init(nibName: nil, bundle: nil)
-
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -78,9 +77,8 @@ final class AddVC: BaseVC {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let controller = mainAssemblerResolver.resolve(HomeVC.self)!
-        navigationController?.pushViewController(controller,
-                                                 animated: true)
+        
+        loadStoredGeofence()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -148,6 +146,7 @@ final class AddVC: BaseVC {
         }
         
         // MARK: mapView
+        mapView.delegate = self
         containerView.addSubview(mapView)
         
         mapView.snp.makeConstraints { make in
@@ -267,7 +266,17 @@ final class AddVC: BaseVC {
         
         // MARK: saveBtn
         saveBtn.rx.tap
-            .bind(to: viewModel.input.onSaveAction)
+            .subscribe(onNext: { [weak self] in
+                guard let self = self else { return }
+                guard let radius = self.radiusTf.text?.toDouble() else { return }
+                let coordinate = self.mapView.centerCoordinate
+                let type: GeofenceType = self.geofenceTypeSegmentControl.selectedSegmentIndex == 0 ?
+                    .enter : .exit
+                let geofence = Geofence(coordinate: coordinate,
+                                        radius: radius,
+                                        type: type)
+                self.viewModel.input.onSaveAction.onNext(geofence)
+            })
             .disposed(by: disposeBag!)
         
         // MARK: onStartCancelAction
@@ -279,7 +288,7 @@ final class AddVC: BaseVC {
         
         // MARK: onStartSaveAction
         viewModel.output.onStartSaveAction
-            .drive(onNext: { [weak self] in
+            .subscribe(onNext: { [weak self] _ in
                 self?.dismiss(animated: true, completion: nil)
             })
             .disposed(by: disposeBag!)
@@ -290,6 +299,36 @@ final class AddVC: BaseVC {
                 self?.focusToCurrentLocation(coordinate: coordinate)
             })
             .disposed(by: disposeBag!)
+    }
+}
+
+// MARK: - MKMapViewDelegate
+extension AddVC: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        guard overlay is MKCircle else { return MKOverlayRenderer() }
+        
+        let circleRenderer = MKCircleRenderer(overlay: overlay)
+        circleRenderer.lineWidth = 1.0
+        circleRenderer.strokeColor = .green
+        circleRenderer.fillColor = UIColor.green.withAlphaComponent(0.4)
+        return circleRenderer
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard annotation is Geofence else { return nil }
+        
+        let identifier = "GeofenceView"
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKPinAnnotationView
+        
+        if annotationView != nil {
+            annotationView?.annotation = annotation
+        } else {
+            annotationView = MKPinAnnotationView(annotation: annotation,
+                                                 reuseIdentifier: identifier)
+            annotationView!.canShowCallout = true
+        }
+        
+        return annotationView
     }
 }
 
@@ -304,5 +343,25 @@ extension AddVC {
                                         longitudinalMeters: 1000)
         mapView.setRegion(region, animated: true)
         mapView.showsUserLocation = true
+    }
+    
+    // MARK: updateGeofenceOnMap
+    private func addGeofenceOnMap(geofence: Geofence) {
+        mapView.addAnnotation(geofence)
+        
+        let circleOverlay = MKCircle(center: geofence.coordinate,
+                                     radius: geofence.radius)
+        mapView.addOverlay(circleOverlay)
+    }
+    
+    // MARK: loadStoredGeofence
+    private func loadStoredGeofence() {
+        let geofenceDataStore = mainAssemblerResolver.resolve(LocalGeofenceDataStore.self)!
+        _ = geofenceDataStore.get()
+            .done { [weak self] geofences in
+                for geofence in geofences {
+                    self?.addGeofenceOnMap(geofence: geofence)
+                }
+            }
     }
 }

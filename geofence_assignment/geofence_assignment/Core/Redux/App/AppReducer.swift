@@ -16,6 +16,8 @@ func appReducer(action: Action, state: AppState?) -> AppState {
     default:
         state.locationState = locationReducer(action: action,
                                               state: state.locationState)
+        state.geofenceState = geofenceReducer(action: action,
+                                              state: state.geofenceState)
     }
     
     return state

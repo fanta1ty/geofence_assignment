@@ -15,4 +15,5 @@ struct AppState: StateType {
     var error: Error?
     
     var locationState = LocationState()
+    var geofenceState = GeofenceState()
 }

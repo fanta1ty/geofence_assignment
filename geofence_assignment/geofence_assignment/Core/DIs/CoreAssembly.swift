@@ -26,8 +26,13 @@ extension CoreAssembly: Assembly {
         setupLogger()
         
         // MARK: Store
-        container.register(Store.self) { r in
+        container.register(Store.self) { _ in
             Store(reducer: appReducer, state: nil)
+        }.inObjectScope(.container)
+            
+        // MARK: LocalGeofenceDataStore
+        container.register(LocalGeofenceDataStore.self) { _ in
+            ImplementLocalGeofenceDataStore()
         }.inObjectScope(.container)
     }
 }
