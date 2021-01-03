@@ -54,6 +54,8 @@ extension GetCurrentLocationUC {
 extension GetCurrentLocationUC {
     // MARK: getCurrentLocation
     @objc final private func getCurrentLocation() {
+        SwiftLocation.allowsBackgroundLocationUpdates = true
+        
         SwiftLocation.gpsLocationWith {
             $0.subscription = .single
             $0.accuracy = .city

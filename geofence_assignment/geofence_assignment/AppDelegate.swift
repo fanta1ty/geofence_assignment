@@ -14,7 +14,6 @@ import ReSwift
 import TSwiftHelper
 import SwiftLocation
 
-let NOTIFICATION_VISITS_DATA = Notification.Name("NOTIFICATION_VISITS_DATA")
 let mainAssemblerResolver = AppDelegate.assembler.resolver
 
 @main
@@ -24,8 +23,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private(set) static var assembler: Assembler = Assembler(AppAssembly.allAssemblies)
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        SwiftLocation.onRestoreGeofences = AppDelegate.onRestoreGeofencedRequests
-        SwiftLocation.onRestoreVisits = AppDelegate.onRestoreVisitsRequests
+        SwiftLocation.onRestoreGeofences = AppDelegate.onRestoreGeofencedRequests(_:)
+        SwiftLocation.onRestoreGPS = AppDelegate.onRestoreGPSRequests(_:)
+        SwiftLocation.onRestoreVisits = AppDelegate.onRestoreVisitsRequests(_:)
+        SwiftLocation.restoreState()
         
         UNUserNotificationCenter.current().delegate = self
         AppDelegate.enablePushNotifications()
@@ -87,8 +88,10 @@ extension AppDelegate {
     // MARK: enablePushNotifications
     private static func enablePushNotifications() {
         UNUserNotificationCenter.current()
-            .requestAuthorization(options: [.alert, .badge, .sound]) { _,_ in
-                
+            .requestAuthorization(options: [.alert, .badge, .sound]) { _,error in
+                if let error = error {
+                    Log.error("[Notification Error]: \(error)")
+                }
             }
     }
     
@@ -163,7 +166,8 @@ extension AppDelegate {
         for request in requests {
             if let unwrappedRequest = request {
                 unwrappedRequest.then(queue: .main) { result in
-                    NotificationCenter.default.post(name: NOTIFICATION_VISITS_DATA, object: result, userInfo: nil)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "NOTIFICATION VISIT DATA"),
+                                                    object: result, userInfo: nil)
 
                     switch result {
                     case .success(let visit):
@@ -179,5 +183,34 @@ extension AppDelegate {
                 }
             }
         }
+    }
+    
+    static func attachSubscribersToGPS(_ requests: [GPSLocationRequest]) {
+        for request in requests {
+            request.then(queue: .main) { result in
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "NOTIFICATION GPS DATA"),
+                                                object: result, userInfo: nil)
+                
+                switch result {
+                case .success(let visit):
+                    sendNotification(title: "New GPS Location",
+                                     subtitle: visit.description,
+                                     object: result.description)
+                case .failure(let error):
+                    sendNotification(title: "GPS Error",
+                                     subtitle: error.localizedDescription,
+                                     object: result.description)
+                }
+            }
+        }
+    }
+    
+    static func onRestoreGPSRequests(_ requests: [GPSLocationRequest]) {
+        guard requests.isEmpty == false else {
+            return
+        }
+        
+        print("Restoring \(requests.count) gps regions...")
+        AppDelegate.attachSubscribersToGPS(requests)
     }
 }
