@@ -17,10 +17,6 @@ final class SplashVC: BaseVC {
     // MARK: - UI Properties
     
     // MARK: - Local Properties
-    private var appStateStore: Store<AppState> {
-        return mainAssemblerResolver.resolve(Store.self)!
-    }
-    
     let viewModel: SplashVM = SplashVM()
     private var disposeBag: DisposeBag?
     

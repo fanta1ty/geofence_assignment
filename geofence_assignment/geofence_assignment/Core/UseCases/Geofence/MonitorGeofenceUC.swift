@@ -15,10 +15,6 @@ import SwiftLocation
 
 final class MonitorGeofenceUC: BaseUC {
     // MARK: Local Properties
-    
-    override func handleError(error: Error) {
-        super.handleError(error: error)
-    }
 }
 
 // MARK: - Public Functions
@@ -53,9 +49,4 @@ extension MonitorGeofenceUC {
     final private func updateState() {
         AppDelegate.attachSubscribersToGeofencedRegions(Array(SwiftLocation.geofenceRequests.list))
     }
-}
-
-// MARK: - Action Functions
-extension MonitorGeofenceUC {
-    
 }

@@ -43,10 +43,6 @@ extension RequestLocationServiceUC {
             Log.info("Location Service Authorization status changed to \(status.rawValue)")
         }
     }
-    
-    final func stop() {
-        
-    }
 }
 
 // MARK: - Private Functions

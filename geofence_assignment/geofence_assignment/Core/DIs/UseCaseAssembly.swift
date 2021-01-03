@@ -20,11 +20,6 @@ extension UseCaseAssembly: Assembly {
     func assemble(container: Container) {
         Log.debug("==> [UseCaseAssembly] was initialized")
         
-        // MARK: - BaseUC
-        container.register(BaseUC.self) { r in
-            BaseUC()
-        }
-        
         // MARK: - Location Section
         // MARK: GetCurrentLocationUC
         container.register(GetCurrentLocationUC.self) { _ in
@@ -40,6 +35,11 @@ extension UseCaseAssembly: Assembly {
         // MARK: AddGeofenceUC
         container.register(AddGeofenceUC.self) { r, geofence in
             AddGeofenceUC(geofence: geofence)
+        }
+        
+        // MARK: DeleteGeofenceUC
+        container.register(DeleteGeofenceUC.self) { r, geofence in
+            DeleteGeofenceUC(geofence: geofence)
         }
         
         // MARK: MonitorGeofenceUC

@@ -42,6 +42,8 @@ target 'geofence_assignment' do
   target 'geofence_assignmentTests' do
     inherit! :search_paths
     # Pods for testing
+    pod 'RxBlocking'
+    pod 'RxTest'
   end
 
   target 'geofence_assignmentUITests' do

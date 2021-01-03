@@ -26,6 +26,10 @@ final class ListCell: UITableViewCell {
         mainAssemblerResolver.resolve(Store.self)!
     }
     
+    private let deleteGeofenceUC: ((Geofence) -> DeleteGeofenceUC) = { geofence in
+        mainAssemblerResolver.resolve(DeleteGeofenceUC.self, argument: geofence)!
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -56,7 +60,7 @@ extension ListCell {
     // MARK: onDeleteBtn
     @objc final private func onDeleteBtn(_ sender: UIButton?) {
         guard let localGeofence = localGeofence else { return }
-        appStateStore.dispatch(UpdateDeleteGeofenceAction(state: localGeofence))
+        deleteGeofenceUC(localGeofence).start()
     }
 }
 

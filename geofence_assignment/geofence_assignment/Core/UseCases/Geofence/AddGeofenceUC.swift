@@ -21,10 +21,6 @@ final class AddGeofenceUC: BaseUC {
         self.geofence = geofence
         super.init()
     }
-    
-    override func handleError(error: Error) {
-        super.handleError(error: error)
-    }
 }
 
 // MARK: - Public Functions
@@ -50,9 +46,4 @@ extension AddGeofenceUC {
     final private func updateState(state: Geofence) {
         appStateStore.dispatch(UpdateAddGeofenceAction(state: state))
     }
-}
-
-// MARK: - Action Functions
-extension AddGeofenceUC {
-    
 }

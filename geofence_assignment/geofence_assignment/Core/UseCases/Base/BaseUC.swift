@@ -13,8 +13,4 @@ class BaseUC {
     var appStateStore: Store<AppState> {
         mainAssemblerResolver.resolve(Store.self)!
     }
-    
-    func handleError(error: Error) {
-        
-    }
 }

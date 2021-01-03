@@ -13,32 +13,12 @@ import ReSwift
 import TSwiftHelper
 
 final class GetCurrentLocationUC: BaseUC {
-    // MARK: Local Properties
-    private var timer = Timer()
-    
-    override func handleError(error: Error) {
-        super.handleError(error: error)
-        
-        Log.error("==> [GetCurrentLocationUC] error to get current location: \(error)")
-    }
 }
 
 // MARK: - Public Functions
 extension GetCurrentLocationUC {
     final func start() {
         getCurrentLocation()
-    }
-    
-    @objc final func stopTimer() {
-        timer.invalidate()
-    }
-    
-    @objc final func startTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 60,
-                                     target: self,
-                                     selector: #selector(getCurrentLocation),
-                                     userInfo: nil,
-                                     repeats: false)
     }
 }
 
@@ -66,7 +46,7 @@ extension GetCurrentLocationUC {
                 self.updateState(state: location.coordinate)
                 
             case .failure(let error):
-                self.handleError(error: error)
+                Log.error(error)
             }
         }
     }
