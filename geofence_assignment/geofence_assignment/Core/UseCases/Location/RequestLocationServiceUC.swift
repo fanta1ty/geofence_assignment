@@ -25,11 +25,11 @@ extension RequestLocationServiceUC {
                 appStateStore.dispatch(UpdateLocationAuthStatusAction(state: .authorized))
                 
             case .denied:
-                SwiftLocation.requestAuthorization(.always) { _ in }
+                SwiftLocation.requestAuthorization(.onlyInUse) { _ in }
                 appStateStore.dispatch(UpdateLocationAuthStatusAction(state: .rejected))
                 
             case .notDetermined:
-                SwiftLocation.requestAuthorization(.always) { _ in }
+                SwiftLocation.requestAuthorization(.onlyInUse) { _ in }
                 appStateStore.dispatch(UpdateLocationAuthStatusAction(state: .none))
                 
             default:
@@ -37,7 +37,7 @@ extension RequestLocationServiceUC {
             }
         }
         
-        SwiftLocation.requestAuthorization(.always) { status in
+        SwiftLocation.requestAuthorization(.onlyInUse) { status in
             updateStatus(status: status)
             
             Log.info("Location Service Authorization status changed to \(status.rawValue)")
