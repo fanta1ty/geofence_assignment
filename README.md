@@ -7,6 +7,7 @@
 * *Dependency management*:  CocoaPods
 * *Source Control*:  GIT with BitBucket
 * *Flow chart*:
+
 ![alt text](https://github.com/fanta1ty/geofence_assignment/blob/master/ios_architect.png)
 
 ### 1. PROBLEM SOLVED
