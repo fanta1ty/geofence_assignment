@@ -9,7 +9,7 @@ import Foundation
 import ReSwift
 import TSwiftHelper
 
-class BaseUC {
+class BaseUC: NSObject {
     var appStateStore: Store<AppState> {
         mainAssemblerResolver.resolve(Store.self)!
     }

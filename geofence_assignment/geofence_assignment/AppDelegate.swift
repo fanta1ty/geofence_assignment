@@ -10,6 +10,7 @@ import UIKit
 import Swinject
 import IQKeyboardManagerSwift
 import SVProgressHUD
+import RxSwift
 import ReSwift
 import TSwiftHelper
 import SwiftLocation
@@ -19,20 +20,28 @@ let mainAssemblerResolver = AppDelegate.assembler.resolver
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
-        
     private(set) static var assembler: Assembler = Assembler(AppAssembly.allAssemblies)
+    private let disposeBag = DisposeBag()
+    
+    private var enterRegionState: EnterRegionObservable {
+        return mainAssemblerResolver.resolve(EnterRegionObservable.self,
+                                             name: GeofenceStateType.enter.rawValue)!
+    }
+    
+    private var exitRegionState: ExitRegionObservable {
+        return mainAssemblerResolver.resolve(ExitRegionObservable.self,
+                                             name: GeofenceStateType.exit.rawValue)!
+    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        SwiftLocation.onRestoreGeofences = AppDelegate.onRestoreGeofencedRequests(_:)
-        SwiftLocation.onRestoreGPS = AppDelegate.onRestoreGPSRequests(_:)
-        SwiftLocation.onRestoreVisits = AppDelegate.onRestoreVisitsRequests(_:)
-        SwiftLocation.restoreState()
-        
-        UNUserNotificationCenter.current().delegate = self
-        AppDelegate.enablePushNotifications()
         
         setupThirdPartyServices(launchOptions: launchOptions)
         launchStartPage()
+        
+        handleEnterRegion()
+        handleExitRegion()
+        
+        UNUserNotificationCenter.current().delegate = self
         
         return true
     }
@@ -40,17 +49,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 // MARK: - UNUserNotificationCenterDelegate
 extension AppDelegate: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        completionHandler()
-    }
-
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.alert, .badge, .sound])
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+        UIApplication.shared.applicationIconBadgeNumber = 0
+        completionHandler()
     }
 }
 
 // MARK: - Private Functions
 extension AppDelegate {
+    // MARK: handleEnterRegion
+    final private func handleEnterRegion() {
+        enterRegionState.subscribe(onNext: { region in
+            if UIApplication.shared.applicationState == .background {
+                self.sendLocalPushNotification(title: "Geofence",
+                                               subtitle: "Did Enter Region: \(region)")
+            }
+        })
+        .disposed(by: disposeBag)
+    }
+    
+    // MARK: handleExitRegion
+    final private func handleExitRegion() {
+        exitRegionState.subscribe(onNext: { region in
+            if UIApplication.shared.applicationState == .background {
+                self.sendLocalPushNotification(title: "Geofence",
+                                               subtitle: "Did Exit Region: \(region)")
+            }
+        })
+        .disposed(by: disposeBag)
+    }
+    
     // MARK: setupThirdPartyServices
     final private func setupThirdPartyServices(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
         
@@ -81,136 +114,22 @@ extension AppDelegate {
         navigationBarAppearace.tintColor = .black
         navigationBarAppearace.barTintColor = .white
     }
-}
-
-// MARK: - Static Functions
-extension AppDelegate {
-    // MARK: enablePushNotifications
-    private static func enablePushNotifications() {
-        UNUserNotificationCenter.current()
-            .requestAuthorization(options: [.alert, .badge, .sound]) { _,error in
-                if let error = error {
-                    Log.error("[Notification Error]: \(error)")
-                }
-            }
-    }
     
-    // MARK: attachSubscribersToGeofencedRegions
-    static func attachSubscribersToGeofencedRegions(_ requests: [GeofencingRequest]) {
-        for item in requests {
-            item.cancelAllSubscriptions()
-            
-            item.then(queue: .main) { result in
-                switch result {
-                case .success(let event):
-                    Log.debug("[Geofence]: \(event)")
-                    sendNotification(title: "New Geofence Event",
-                                     subtitle: event.description,
-                                     object: result.description)
-                    
-                case .failure(let error):
-                    Log.error("[Geofence]: \(error)")
-                    sendNotification(title: "Geofence Error",
-                                     subtitle: error.localizedDescription,
-                                     object: result.description)
-                }
-            }
-        }
-    }
-    
-    // MARK: sendNotification
-    static func sendNotification(title: String,
-                                 subtitle: String,
-                                 object: Any? = nil,
-                                 afterInterval: TimeInterval = 3) {
+    final private func sendLocalPushNotification(title: String, subtitle: String,
+                                                 afterInterval: TimeInterval = 3) {
         let content = UNMutableNotificationContent()
         content.title = title
         content.subtitle = subtitle
         content.sound = UNNotificationSound.default
         
-        if let object = object {
-            content.userInfo = ["result": object]
-        }
-        
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: afterInterval,
-                                                        repeats: false)
-        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: afterInterval, repeats: false)
         let request = UNNotificationRequest(identifier: UUID().uuidString,
-                                            content: content,
-                                            trigger: trigger)
-        
-        UNUserNotificationCenter.current()
-            .add(request)
+                                            content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request)
     }
-    
-    // MARK: onRestoreGeofencedRequests
-    public static func onRestoreGeofencedRequests(_ requests: [GeofencingRequest]) {
-        guard requests.isEmpty == false else {
-            return
-        }
-        
-        AppDelegate.attachSubscribersToGeofencedRegions(requests)
-    }
-    
-    // MARK: onRestoreVisitsRequests
-    public static func onRestoreVisitsRequests(_ requests: [VisitsRequest]) {
-        guard requests.isEmpty == false else {
-            return
-        }
-        
-        attachSubscribersToVisitsRegions(requests)
-    }
-    
-    // MARK: attachSubscribersToVisitsRegions
-    public static func attachSubscribersToVisitsRegions(_ requests: [VisitsRequest?]) {
-        for request in requests {
-            if let unwrappedRequest = request {
-                unwrappedRequest.then(queue: .main) { result in
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "NOTIFICATION VISIT DATA"),
-                                                    object: result, userInfo: nil)
+}
 
-                    switch result {
-                    case .success(let visit):
-                        sendNotification(title: "New Enter",
-                                         subtitle: visit.description,
-                                         object: result.description)
-                        
-                    case .failure(let error):
-                        sendNotification(title: "Enter Error",
-                                         subtitle: error.localizedDescription,
-                                         object: result.description)
-                    }
-                }
-            }
-        }
-    }
+// MARK: - Static Functions
+extension AppDelegate {
     
-    static func attachSubscribersToGPS(_ requests: [GPSLocationRequest]) {
-        for request in requests {
-            request.then(queue: .main) { result in
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "NOTIFICATION GPS DATA"),
-                                                object: result, userInfo: nil)
-                
-                switch result {
-                case .success(let visit):
-                    sendNotification(title: "New GPS Location",
-                                     subtitle: visit.description,
-                                     object: result.description)
-                case .failure(let error):
-                    sendNotification(title: "GPS Error",
-                                     subtitle: error.localizedDescription,
-                                     object: result.description)
-                }
-            }
-        }
-    }
-    
-    static func onRestoreGPSRequests(_ requests: [GPSLocationRequest]) {
-        guard requests.isEmpty == false else {
-            return
-        }
-        
-        print("Restoring \(requests.count) gps regions...")
-        AppDelegate.attachSubscribersToGPS(requests)
-    }
 }

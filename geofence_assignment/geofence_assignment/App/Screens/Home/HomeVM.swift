@@ -26,6 +26,8 @@ protocol HomeOutput {
     var onStartAddGeofenceAction: AddGeofenceObservable { get }
     var onStartMonitorGeofenceAction: Driver<()> { get }
     var onStartDeleteGeofenceAction: DeleteGeofenceObservable { get }
+    var onStartEnterRegionAction: EnterRegionObservable { get }
+    var onStartExitRegionAction: ExitRegionObservable { get }
 }
 
 final class HomeVM {
@@ -142,6 +144,16 @@ extension HomeVM: HomeOutput {
     var onStartDeleteGeofenceAction: DeleteGeofenceObservable {
         return mainAssemblerResolver.resolve(DeleteGeofenceObservable.self,
                                              name: GeofenceStateType.delete.rawValue)!
+    }
+    
+    var onStartEnterRegionAction: EnterRegionObservable {
+        return mainAssemblerResolver.resolve(EnterRegionObservable.self,
+                                             name: GeofenceStateType.enter.rawValue)!
+    }
+    
+    var onStartExitRegionAction: ExitRegionObservable {
+        return mainAssemblerResolver.resolve(ExitRegionObservable.self,
+                                             name: GeofenceStateType.exit.rawValue)!
     }
 }
 

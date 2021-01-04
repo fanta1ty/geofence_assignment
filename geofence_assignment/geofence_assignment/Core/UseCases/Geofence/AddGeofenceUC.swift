@@ -16,6 +16,7 @@ import SwiftLocation
 final class AddGeofenceUC: BaseUC {
     // MARK: Local Properties
     private let geofence: Geofence
+    private let locationManager: CLLocationManager = CLLocationManager()
     
     init(geofence: Geofence) {
         self.geofence = geofence
@@ -36,6 +37,11 @@ extension AddGeofenceUC {
     final private func storedGeofence(geofence: Geofence) -> Promise<Geofence> {
         return Promise { r in
             let geofenceDataStore = mainAssemblerResolver.resolve(LocalGeofenceDataStore.self)!
+            
+            let radius = geofence.radius > locationManager.maximumRegionMonitoringDistance
+                ? locationManager.maximumRegionMonitoringDistance : geofence.radius
+            geofence.radius = radius
+            
             _ = geofenceDataStore.set(geofence)
             
             r.fulfill(geofence)

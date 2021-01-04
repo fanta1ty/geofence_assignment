@@ -20,3 +20,13 @@ struct UpdateAddGeofenceAction: Action {
 struct UpdateDeleteGeofenceAction: Action {
     let state: Geofence
 }
+
+// MARK: UpdateDeleteGeofenceAction
+struct UpdateEnterRegionAction: Action {
+    let state: CLRegion
+}
+
+// MARK: UpdateDeleteGeofenceAction
+struct UpdateExitRegionAction: Action {
+    let state: CLRegion
+}

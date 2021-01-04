@@ -49,5 +49,19 @@ extension StateAssembly: Assembly {
             let appStateStore: Store<AppState> = r.resolve(Store.self)!
             return appStateStore.state.geofenceState.deleteGeofenceState.asObservable()
         }
+        
+        // MARK: EnterRegionObservable
+        container.register(EnterRegionObservable.self,
+                           name: GeofenceStateType.enter.rawValue) { r in
+            let appStateStore: Store<AppState> = r.resolve(Store.self)!
+            return appStateStore.state.geofenceState.enterRegionState.asObservable()
+        }
+        
+        // MARK: EnterRegionObservable
+        container.register(ExitRegionObservable.self,
+                           name: GeofenceStateType.exit.rawValue) { r in
+            let appStateStore: Store<AppState> = r.resolve(Store.self)!
+            return appStateStore.state.geofenceState.exitRegionState.asObservable()
+        }
     }
 }

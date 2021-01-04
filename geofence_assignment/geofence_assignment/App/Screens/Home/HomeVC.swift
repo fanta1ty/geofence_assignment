@@ -233,6 +233,26 @@ final class HomeVC: BaseVC {
                     .onMonitorGeofenceAction.onNext(())
             })
             .disposed(by: disposeBag!)
+        
+        // MARK: onStartEnterRegionAction
+        viewModel.output
+            .onStartEnterRegionAction
+            .subscribe(onNext: { [weak self] region in
+                guard let self = self else { return }
+                self.showAlert(title: "Geofence",
+                               message: "Did enter region: \(region)")
+            })
+            .disposed(by: disposeBag!)
+        
+        // MARK: onStartExitRegionAction
+        viewModel.output
+            .onStartExitRegionAction
+            .subscribe(onNext: { [weak self] region in
+                guard let self = self else { return }
+                self.showAlert(title: "Geofence",
+                               message: "Did exit region: \(region)")
+            })
+            .disposed(by: disposeBag!)
     }
 }
 
@@ -309,5 +329,19 @@ extension HomeVC {
                     self?.addGeofenceOnMap(geofence: geofence)
                 }
             }
+    }
+    
+    // MARK: showSimpleAlertWithTitle
+    private func showAlert(title: String!,
+                           message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK",
+                                   style: .cancel,
+                                   handler: nil)
+        alert.addAction(action)
+        
+        navigationController?.present(alert,
+                                      animated: true,
+                                      completion: nil)
     }
 }
